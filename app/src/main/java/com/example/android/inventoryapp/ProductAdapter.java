@@ -1,6 +1,7 @@
 package com.example.android.inventoryapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,14 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         productQuantity.setText(product.getQuantity());
         productSupplier.setText(product.getSupplier());
         //productImage.setImageResource(R.drawable.ic);
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ProductDescriptionActivity.class);
+                getContext().startActivity(intent);
+            }
+        });
 
         return convertView;
     }

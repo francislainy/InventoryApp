@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by Francislainy on 27/02/2017.
  */
 
-public class ProductHelper extends SQLiteOpenHelper {
+public class ProductDBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "products.db";
@@ -18,12 +18,13 @@ public class ProductHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME = "products";
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_PRODUCT = "product_name";
-    private static final String COLUMN_PRICE = "10";
-    private static final String COLUMN_QUANTITY = "0";
-    private static final String COLUMN_SUPPLIER = "AMAZON";
+    private static final String COLUMN_PRICE = "product_price";
+    private static final String COLUMN_QUANTITY = "product_quantity";
+    private static final String COLUMN_SUPPLIER = "product_supplier";
 
-    public ProductHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+    public ProductDBHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        //SQLiteDatabase db = this.getWritableDatabase();
     }
 
     @Override
@@ -31,7 +32,7 @@ public class ProductHelper extends SQLiteOpenHelper {
         String query = "CREATE TABLE " + TABLE_NAME + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", " +
                 COLUMN_PRODUCT + " TEXT" + ", " +
-                COLUMN_PRICE + " TEX" + ", " +
+                COLUMN_PRICE + " TEXT" + ", " +
                 COLUMN_QUANTITY + " TEXT" + ", " +
                 COLUMN_SUPPLIER + " TEXT" +
                 ");";
@@ -44,16 +45,32 @@ public class ProductHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addProduct(Product product) {
+    public boolean insertData(Product product) {
+        SQLiteDatabase db = getWritableDatabase();
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_PRODUCT, product.getProductName());
         values.put(COLUMN_PRICE, product.getPrice());
         values.put(COLUMN_QUANTITY, product.getQuantity());
         values.put(COLUMN_SUPPLIER, product.getSupplier());
 
-        SQLiteDatabase db = getWritableDatabase();
-        db.insert(TABLE_NAME, null, values);
+        long result = db.insert(TABLE_NAME, null, values);
+
+        if (result == -1) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
+
+    public Cursor getAllData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME, null);
+        return cursor;
+    }
+
+
 
     public String databaseToString() {
         String dbString = "";
