@@ -2,54 +2,66 @@ package com.example.android.inventoryapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 /**
  * Created by Francislainy on 27/02/2017.
  */
 
-public class ProductAdapter extends ArrayAdapter<Product> {
-    public ProductAdapter(Context context, ArrayList<Product> products) {
-        super(context, 0, products);
+
+public class ProductAdapter extends CursorAdapter {
+
+    ProductDBHelper productDBHelper;
+
+    public ProductAdapter(Context context, Cursor cursor) {
+        super(context, cursor, 0);
+
+       // productDBHelper = new ProductDBHelper(getContext());
     }
 
-    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Product product = getItem(position);
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+    }
 
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
-        }
+    @Override
+    public void bindView(View view, final Context context, Cursor cursor) {
 
-        TextView productName = (TextView) convertView.findViewById(R.id.productNameView);
-        TextView productPrice = (TextView) convertView.findViewById(R.id.priceView);
-        TextView productQuantity = (TextView) convertView.findViewById(R.id.quantityView);
-        TextView productSupplier = (TextView) convertView.findViewById(R.id.supplierView);
-        ImageView productImage = (ImageView) convertView.findViewById(R.id.imageView);
+        TextView productName = (TextView) view.findViewById(R.id.productNameView);
+        TextView productPrice = (TextView) view.findViewById(R.id.priceView);
+        TextView productQuantity = (TextView) view.findViewById(R.id.quantityView);
+        TextView productSupplier = (TextView) view.findViewById(R.id.supplierView);
+        ImageView productImage = (ImageView) view.findViewById(R.id.imageView);
 
-        productName.setText(product.getProductName());
-        productPrice.setText(product.getPrice());
-        productQuantity.setText(product.getQuantity());
-        productSupplier.setText(product.getSupplier());
+        String product_name = cursor.getString(cursor.getColumnIndexOrThrow(productDBHelper.COLUMN_PRODUCT));
+        String product_price = cursor.getString(cursor.getColumnIndexOrThrow(productDBHelper.COLUMN_PRICE));
+        String product_quantity = cursor.getString(cursor.getColumnIndexOrThrow(productDBHelper.COLUMN_QUANTITY));
+        String product_supplier = cursor.getString(cursor.getColumnIndexOrThrow(productDBHelper.COLUMN_SUPPLIER));
+
+        productName.setText(product_name);
+        productPrice.setText(product_price);
+        productQuantity.setText(product_quantity);
+        productSupplier.setText(product_supplier);
+
+//        productQuantity.setText(product.getQuantity());
+//        productSupplier.setText(product.getSupplier());
+
         //productImage.setImageResource(R.drawable.ic);
 
-        convertView.setOnClickListener(new View.OnClickListener() {
+
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ProductDescriptionActivity.class);
-                getContext().startActivity(intent);
+                Intent intent = new Intent(context, ProductDescriptionActivity.class);
+                context.startActivity(intent);
             }
         });
 
-        return convertView;
     }
 }

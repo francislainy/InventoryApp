@@ -31,7 +31,7 @@ public class AddProductActivity extends AppCompatActivity {
         quantity = (EditText) findViewById(R.id.add_product_quantity);
         supplier = (EditText) findViewById(R.id.add_product_supplier);
         saveDataButton = (Button) findViewById(R.id.save_product_button);
-        viewAllDataButton = (Button) findViewById(R.id.add_image_button);
+        viewAllDataButton = (Button) findViewById(R.id.show_database_button);
 
         productDBHelper = new ProductDBHelper(this);
 

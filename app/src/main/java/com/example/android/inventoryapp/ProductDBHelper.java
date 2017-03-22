@@ -15,12 +15,12 @@ public class ProductDBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "products.db";
 
-    private static final String TABLE_NAME = "products";
-    private static final String COLUMN_ID = "_id";
-    private static final String COLUMN_PRODUCT = "product_name";
-    private static final String COLUMN_PRICE = "product_price";
-    private static final String COLUMN_QUANTITY = "product_quantity";
-    private static final String COLUMN_SUPPLIER = "product_supplier";
+    public static final String TABLE_NAME = "products";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_PRODUCT = "product_name";
+    public static final String COLUMN_PRICE = "product_price";
+    public static final String COLUMN_QUANTITY = "product_quantity";
+    public static final String COLUMN_SUPPLIER = "product_supplier";
 
     public ProductDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -69,8 +69,6 @@ public class ProductDBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("select * from " + TABLE_NAME, null);
         return cursor;
     }
-
-
 
     public String databaseToString() {
         String dbString = "";
